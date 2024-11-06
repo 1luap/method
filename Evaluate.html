@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partiomenetelmän itsearviointityökalu</title>
+    <style>
+        :root {
+            --primary-blue: #253764;
+            --light-blue: #8dd7f7;
+            --dark-blue: #0074c7;
+            --light-gray: #f4efe5;
+            --dark-green: #119446;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--light-gray);
+            color: var(--primary-blue);
+        }
+
+        .header {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .intro {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .evaluation-section {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: var(--dark-blue);
+            border-bottom: 2px solid var(--light-blue);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .section-description {
+            font-style: italic;
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: var(--light-gray);
+            border-radius: 4px;
+        }
+
+        .criteria {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background-color: var(--light-gray);
+            border-radius: 4px;
+        }
+
+        .rating-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .rating-button {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--light-blue);
+            color: var(--primary-blue);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .rating-button:hover {
+            background-color: var(--dark-blue);
+            color: white;
+        }
+
+        .rating-button.active {
+            background-color: var(--dark-green);
+            color: white;
+        }
+
+        .submit-section {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .submit-button {
+            padding: 1rem 2rem;
+            background-color: var(--dark-green);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .rating-buttons {
+                flex-wrap: wrap;
+            }
+
+            .rating-button {
+                flex: 1 1 calc(20% - 0.5rem);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Partiomenetelmän itsearviointityökalu</h1>
+    </div>
+
+    <div class="intro">
+        <p>Partiomenetelmä vastaa kysymykseen, <strong>miten</strong> partiossa kasvetaan ja kasvatetaan. Partiomenetelmän avulla saavutetaan partiotoiminnan kasvatustavoitteet ja sitä kautta toteutetaan partioliikkeen päämäärää.</p>
+        <p>Tämä työkalu on kehitetty sinulle johtaja avuksi partiomenetelmän toteutumisen tarkasteluun johtamassasi ryhmässä. Ota tarkastelun kohteeksi mennyt puolivuotiskausi. Muista, että partiomenetelmä näyttäytyy eri ikäkausissa hieman eri tavoin.</p>
+    </div>
+
+    <div id="evaluationContainer">
+        <script>
+            // Define all sections and their criteria
+            const sections = [
+                {
+                    title: "Lupaus, tunnus ja ihanteet",
+                    description: "Partiolaisen lupaus, tunnus ja ihanteet kuvaavat partion arvoja. Partiolainen pyrkii toimimaan näiden arvojen mukaisesti.",
+                    criteria: [
+                        "Jokainen ryhmän jäsen on antanut ikäkauden lupauksen",
+                        "Ryhmäläiset tietävät ikäkauden ihanteet ja partion tunnuksen",
+                        "Ryhmässä puhutaan säännöllisesti partion arvoista ja siitä miten ne näkyvät ryhmän toiminnassa",
+                        "Ryhmäläiset tietävät, että partio on maailmanlaajuinen liike, jota yhdistää sama lupaus ja yhteiset arvot"
+                    ]
+                },
+                {
+                    title: "Symboliikka",
+                    description: "Partion symboliikka muodostuu yhteisesti merkityksellisiksi koettujen toimintatapojen ja tunnusten kokonaisuudesta. Symboliikka tukee oman, ryhmän ja yhteisön identiteetin kehittymistä.",
+                    criteria: [
+                        "Ryhmällä on aktiivisessa käytössä omat symbolit",
+                        "Ryhmäläiset käyttävät partiohuivia ja partioasua lippukunnan tapojen mukaisesti",
+                        "Ryhmä osallistuu lippukunnan perinteisiin",
+                        "Ryhmällä on toistuvia tapoja luomassa jatkuvuutta",
+                        "Ryhmässä tiedetään, että partion sisällä eri yhteisöissä on niin yhteisiä kuin omia symboleita"
+                    ]
+                },
+                {
+                    title: "Oma partiopolku",
+                    description: "Innostava ja sopivan haastava toiminta auttaa kasvamaan ja kehittymään omalla partiopolulla. Partiossa opitaan yksin ja yhdessä taitoja elämää varten.",
+                    criteria: [
+                        "Ryhmä tekee ikäkautensa partioaktiviteetteja",
+                        "Ikäkauden partio-ohjelmaa sovelletaan ryhmän osaamistason mukaan",
+                        "Ryhmän toiminnassa huomioidaan jokaisen yksilölliset tarpeet ja kiinnostuksen kohteet",
+                        "Uusi toimintavuosi tuo ryhmälle mukanaan uusia kokemuksia",
+                        "Johtaja tekee näkyväksi ryhmän kehittymisen",
+                        "Ryhmäläisille tarjotaan mahdollisuuksia kehittyä partiotoiminnassa myös oman ryhmän ulkopuolella"
+                    ]
+                },
+                {
+                    title: "Ryhmässä toimiminen",
+                    description: "Partiossa toimitaan vertaisryhmissä, joissa tehdään päätöksiä ja kannetaan vastuuta yhdessä. Oma ryhmä on turvallinen ympäristö harjoitella johtajuutta ja vuorovaikutusta.",
+                    criteria: [
+                        "Ryhmä on partio-ohjelmassa suositellun kokoinen",
+                        "Jokainen vaikuttaa ryhmän päätöksiin ja toimintaan",
+                        "Jokainen tuo oman tärkeän panoksena ryhmään ja saa olla ryhmässä omanlaisensa",
+                        "Ryhmässä on erilaisia tehtäviä, joita jokainen hoitaa vuorollaan",
+                        "Ryhmässä pääsee harjoittelemaan johtamis- ja vastuutehtäviä"
+                    ]
+                },
+                {
+                    title: "Tekemällä oppiminen",
+                    description: "Partiossa opitaan yhdessä kokemalla ja tekemällä. Etukäteen suunnittelu ja jälkikäteen reflektointi tukevat oppimista.",
+                    criteria: [
+                        "Jokainen saa ryhmässä kokeilla itse",
+                        "Ryhmä tekee asioita oikeasti, eikä ainoastaan harjoittele tai kuuntele niistä",
+                        "Ryhmäläiset saavat partiosta uusia myönteisiä kokemuksia",
+                        "Ryhmäläiset osallistuvat myös itse tulevan toiminnan suunnitteluun",
+                        "Tekemisen tai kokemisen jälkeen ryhmä tarkastelee mitä oppi",
+                        "Epäonnistuminen on sallittua"
+                    ]
+                },
+                {
+                    title: "Aikuinen tuki",
+                    description: "Partio on nuorten liike, mitä aikuiset tukevat. Aikuinen tukee lapsen ja nuoren yksilöllistä kasvua, osallistumista sekä vaikuttamismahdollisuuksia kuunnellen ja auttaen.",
+                    criteria: [
+                        "Ryhmästä vastaava aikuinen tiedostaa oman roolinsa kyseisessä ikäkaudessa",
+                        "Aikuinen tuntee ryhmäläisensä ja välittää heistä",
+                        "Aikuinen tarttuu ryhmäläisten esille nostamiin ideoihin ja auttaa toteuttamaan ne",
+                        "Aikuinen auttaa ryhmäläisiä näkemään, mitä he ovat oppineet",
+                        "Aikuinen tukee ja haastaa jokaista ryhmäläistä hänen tarvitsemallaan tavalla",
+                        "Aikuinen toimii esikuvana",
+                        "Aikuinen varmistaa ryhmäläisten henkisen ja fyysisen turvallisuuden"
+                    ]
+                },
+                {
+                    title: "Hyvän tekeminen",
+                    description: "Partiossa opitaan kantamaan vastuuta itsestä ja muista. Partiolainen rakentaa parempaa maailmaa, on aktiivinen kansalainen ja toimii yhdessä muiden kanssa yhteisöjensä hyväksi.",
+                    criteria: [
+                        "Jokainen huomioi ryhmän muut jäsenet",
+                        "Jokainen osallistuu ryhmän ja lippukunnan yhteisiin tehtäviin",
+                        "Ryhmä osallistuu muiden hyvinvointiin tähtääviin talkoisiin ja näkyy positiivisesti yhteisössään",
+                        "Ryhmäläiset havaitsevat epäkohtia ja puuttuvat niihin"
+                    ]
+                },
+                {
+                    title: "Toiminta luonnossa",
+                    description: "Luonto on partiossa keskeisin kasvamisympäristö. Luonnossa toimiminen rakentaa henkilökohtaista luontosuhdetta.",
+                    criteria: [
+                        "Ryhmän toiminta tapahtuu pääasiassa ulkona",
+                        "Ryhmä retkeilee ikäkauden partio-ohjelman mukaisesti",
+                        "Ryhmäläiset viihtyvät luonnossa",
+                        "Ryhmä toimii monipuolisesti luonnossa",
+                        "Ryhmän toiminta on ympäristöystävällistä ja luontoa kunnioittavaa"
+                    ]
+                },
+                {
+                    title: "Elämyksellisyys",
+                    description: "Partiossa koetaan pieniä ja suuria elämyksiä sekä seikkailuja erilaisissa ympäristöissä. Partio tarjoaa mahdollisuuden pitää hauskaa yhdessä.",
+                    criteria: [
+                        "Ryhmän jäsenillä on ryhmässä hauskaa",
+                        "Ryhmän johtaja huomioi toimintaa suunnitellessaan ikäkautta kiinnostavia tekijöitä",
+                        "Ryhmä kokee elämyksiä yhdessä säännöllisin väliajoin",
+                        "Ryhmä onnistuu uusissa asioissa"
+                    ]
+                }
+            ];
+
+            // Function to create the evaluation sections
+            function createEvaluationSections() {
+                const container = document.getElementById('evaluationContainer');
+                
+                sections.forEach(section => {
+                    const sectionDiv = document.createElement('div');
+                    sectionDiv.className = 'evaluation-section';
+                    
+                    sectionDiv.innerHTML = `
+                        <h2>${section.title}</h2>
+                        <p class="section-description">${section.description}</p>
+                        ${section.criteria.map(criterion => `
+                            <div class="criteria">
+                                <p>${criterion}</p>
+                                <div class="rating-buttons">
+                                    <button class="rating-button" onclick="setRating(this)">1</button>
+                                    <button class="rating-button" onclick="setRating(this)">2</button>
+                                    <button class="rating-button" onclick="setRating(this)">3</button>
+                                    <button class="rating-button" onclick="setRating(this)">4</button>
+                                    <button class="rating-button" onclick="setRating(this)">5</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    `;
+                    
+                    container.appendChild(sectionDiv);
+                });
+            }
+
+            // Function to handle rating selection
+            function setRating(button) {
+                // Remove active class from siblings
+                const buttons = button.parentElement.getElementsByClassName('rating-button');
+                Array.from(buttons).forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+            }
+
+            // Initialize the form when the page loads
+            document.addEventListener('DOMContentLoaded', createEvaluationSections);
+        </script>
+    </div>
+</body>
+</html>
